@@ -35,7 +35,7 @@ void buscarPorNome() {
         if (campo == NULL) continue;
         produto.preco = atof(campo);
 
-        if (strcmp(produto.nome, nomeBusca) == 0) {   // troque por strcasecmp se quiser ignorar maiúsculas
+        if (strcmp(produto.nome, nomeBusca) == 0) { 
             printf("\nProduto encontrado!\n");
             printf("Nome: %s\n", produto.nome);
             printf("Categoria: %s\n", produto.categoria);
