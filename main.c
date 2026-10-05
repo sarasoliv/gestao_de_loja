@@ -55,7 +55,7 @@ void remover(int posicao){
         if (strcmp(nome, produto_removido) != 0) {
             fprintf(
                 temporario,
-                "%s;%.2f;%i\n\n",
+                "%s;%.2f;%i",
                 nome,
                 preco,
                 estoque
@@ -79,13 +79,13 @@ void remover(int posicao){
 
     // 6. Apaga o CSV antigo
     printf("\n\nApagando o arquivo produtos_estoque.csv atual...\n\n");
-    remove("produtos_estoque.csv\n\n");
+    remove("produtos_estoque.csv");
     printf("arquivo CSV antigo foi apagado!\n\n");
 	printf("-------------------------------------");
 
     // 7. Renomeia o temporário para produtos_estoque.csv
 	printf("\n\nRenomeando temporario.csv para produtos_estoque.csv...\n\n");
-    rename("temporario.csv", "produtos_estoque.csv\n\n"); //rename(recebe nome, passa nome)
+    rename("temporario.csv", "produtos_estoque.csv"); //rename(recebe nome, passa nome)
     printf("Novo arquivo produtos_estoque.csv criado e atualizado com sucesso!\n\n");
     printf("-------------------------------------");
 };
