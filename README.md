@@ -9,7 +9,7 @@
 ### Yasmin Santos de Lima
 ### Rodrygo Schadeck Gomes
 
-### Descrição do Sistema:
+## Descrição do Sistema:
 
 O sistema irá conter um menu principal com cadastro, onde será possivel realizar login utilizando e-mail/nome de usuário e senha,
 listagem que exibirá todos os produtos e mercadorias cadastrados, busca por nome, remoção, atualização do produto o qual a cada modificação realizada 
