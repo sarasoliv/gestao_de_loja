@@ -51,3 +51,49 @@ void buscarPorNome() {
         printf("\nProduto nao encontrado.\n");
     }
 }
+
+#include <stdio.h>
+#include <locale.h>
+int main(){
+	
+setlocale(LC_ALL, "Portuguese");
+int opcao;
+	
+	printf("===== menu de Opções =====\n");
+	printf("[1] - Cadastar usuário \n");
+	printf("[2] - Cadastar produto \n");
+	printf("[3] - Listar pr odutos \n");
+	printf("[4] - Remover produto \n");
+	printf("[5] - Atualizar produto \n");
+	scanf("%d", &opcao);
+	
+	void cadastrar_usuario(void){
+		if "1":
+			
+	}
+	
+	switch (opcao) {
+		case 7:
+			printf("a\n");
+		case 1: 
+			cadastrar_usuario();
+		case 2:
+			printf("b\n");
+			break;
+		case 3:
+			printf("c\n");
+			break;
+		case 4:
+			printf("d\n");
+			break;
+		case 5:
+			printf("e\n");
+			break;
+		default:
+			printf("bn\n");
+	}
+	
+	
+	
+	return 0;
+}
