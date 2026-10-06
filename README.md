@@ -15,3 +15,7 @@ O sistema irá conter um menu principal com cadastro, onde será possivel realiz
 listagem que exibirá todos os produtos e mercadorias cadastrados, busca por nome, remoção, atualização do produto o qual a cada modificação realizada 
 sua data será atualizada automaticamente, busca por categoria e busca por
 faixa de preço.
+
+## Compilação e Execução:
+
+Ao compilar e executar o programa o sistema exibe o menu de opções, que irá conter cadastro, listagen, remo 
