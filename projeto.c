@@ -60,11 +60,11 @@ setlocale(LC_ALL, "Portuguese");
 int opcao;
 	
 	printf("===== menu de Opções =====\n");
-	printf("[1] - Cadastar usuário \n");
-	printf("[2] - Cadastar produto \n");
-	printf("[3] - Listar pr odutos \n");
-	printf("[4] - Remover produto \n");
-	printf("[5] - Atualizar produto \n");
+	printf("[1] - Cadastar produto \n");
+	printf("[2] - Listar pr odutos \n");
+	printf("[3] - Remover produto \n");
+	printf("[4] - Atualizar produto \n");
+	printf("[5] - Sair \n ");
 	scanf("%d", &opcao);
 	
 	void cadastrar_usuario(void){
@@ -87,10 +87,10 @@ int opcao;
 			printf("d\n");
 			break;
 		case 5:
-			printf("e\n");
+			printf("Saindo do Programa\n");
 			break;
 		default:
-			printf("bn\n");
+			printf("Selecione uma das opções acima\n");
 	}
 	
 	
