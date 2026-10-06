@@ -349,9 +349,8 @@ void buscarPorFaixa(void) { //função void de busca por produto através da fai
 
 //6
 void remover(void){
-		//remove todas as infos do produto
-		// 1. Remove do ARRAY
-		char produto_removido[100];
+	//remove todas as infos do produto
+	char produto_removido[100];
 
     printf("\n===== REMOVER PRODUTO =====\n");
     printf("Digite o nome do produto que deseja remover: ");
@@ -366,7 +365,16 @@ void remover(void){
     printf("\nProduto informado para remoção: %s\n", produto_removido);
     printf("-------------------------------------");
     
-  
+    char confirmacao;
+
+	printf("\n\nTem certeza que quer excluir o produto %s ?\n\n", produto_removido);
+	scanf("%c", &confirmacao);
+	limparEntrada();
+
+	if (confirmacao != 'S' && confirmacao != 's') {
+    	printf("Exclusão cancelada!\n");
+    	return;
+	}
     // 2. Abrindo o arquivo original do estoque de produtos em CSV
     FILE *arquivo = fopen("produtos.csv", "r");
         if (arquivo == NULL) {
