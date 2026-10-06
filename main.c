@@ -3,12 +3,12 @@
 #include <string.h>
 #include <locale.h>
 
-//funcoes
+//funções
 // Estrutura para representar o Produto
 typedef struct {
     char nome[100];
     char categoria[100];
-    float preço;
+    float preco;
 } Produto;
 
 void limparEntrada(void) {
@@ -40,7 +40,7 @@ void cadastrarProduto() {
     }
 
     printf("Digite o preço do produto: ");
-    if (scanf("%f", &produto.preço) != 1) {
+    if (scanf("%f", &produto.preco) != 1) {
         printf("Entrada inválida.\n");
         return;
     }
@@ -53,7 +53,7 @@ void cadastrarProduto() {
     }
 
     // Escreve os dados formatados com ';' no arquivo
-    fprintf(arquivo, "%s;%s;%.2f\n", produto.nome, produto.categoria, produto.preço);
+    fprintf(arquivo, "%s;%s;%.2f\n", produto.nome, produto.categoria, produto.preco);
 
     fclose(arquivo);
 
@@ -66,7 +66,7 @@ void listar() {
     char linha[200];
     char *nome;
     char *categoria;
-    char *preço;
+    char *preco;
     int contador = 1;
 
     arquivo = fopen("produtos.csv", "r");
@@ -82,13 +82,13 @@ void listar() {
 
         nome = strtok(linha, ";\n");
         categoria = strtok(NULL, ";\n");
-        preço = strtok(NULL, ";\n");
+        preco = strtok(NULL, ";\n");
 
-        if (nome != NULL && categoria != NULL && preço != NULL) {
+        if (nome != NULL && categoria != NULL && preco != NULL) {
             printf("\nProduto %d\n", contador);
             printf("Nome: %s\n", nome);
             printf("Categoria: %s\n", categoria);
-            printf("Preco: R$ %s\n", preço);
+            printf("Preço: R$ %s\n", preco);
 
             contador++;
         }
@@ -98,6 +98,256 @@ void listar() {
 }
 
 //3
+void buscarPorNome() {
+    FILE *arquivo;
+    char linha[200];
+    char nomeBusca[100];
+    int encontrado = 0;
+
+    printf("\n===== BUSCAR POR NOME =====\n");
+    printf("Digite o nome do produto: ");
+    if (scanf(" %99[^\n]", nomeBusca) != 1) {
+        printf("Entrada inválida.\n");
+        return;
+    }
+
+    arquivo = fopen("produtos.csv", "r");
+    if (arquivo == NULL) {
+        printf("Nenhum produto cadastrado.\n");
+        return;
+    }
+
+    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+        Produto produto;
+        char *campo;
+
+        linha[strcspn(linha, "\r\n")] = '\0';
+
+        campo = strtok(linha, ";");
+        if (campo == NULL) continue;
+        snprintf(produto.nome, sizeof(produto.nome), "%s", campo);
+
+        campo = strtok(NULL, ";");
+        if (campo == NULL) continue;
+        snprintf(produto.categoria, sizeof(produto.categoria), "%s", campo);
+
+        campo = strtok(NULL, ";");
+        if (campo == NULL) continue;
+        produto.preco = atof(campo);
+
+        if (strcmp(produto.nome, nomeBusca) == 0) { 
+            printf("\nProduto encontrado!\n");
+            printf("Nome: %s\n", produto.nome);
+            printf("Categoria: %s\n", produto.categoria);
+            printf("Preço: R$ %.2f\n", produto.preco);
+            encontrado = 1;
+            break;
+        }
+    }
+
+    fclose(arquivo);
+
+    if (!encontrado) {
+        printf("\nProduto não encontrado.\n");
+    }
+}
+
+//4
+void buscarPorCategoria() {
+    FILE *arquivo;
+    char linha[200];
+    char categoriaBusca[100];
+    int encontrado = 0;
+
+    printf("\n===== BUSCAR POR CATEGORIA =====\n");
+    printf("Digite a categoria: ");
+    scanf(" %99[^\n]", categoriaBusca);
+
+    arquivo = fopen("produtos.csv", "r");
+
+    if (arquivo == NULL) {
+        printf("Nenhum produto cadastrado.\n");
+        return;
+    }
+
+    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+
+        Produto produto;
+        char *campo;
+
+        // Remove o \n do final da linha
+        linha[strcspn(linha, "\r\n")] = '\0';
+
+        // Nome
+        campo = strtok(linha, ";");
+
+        if (campo == NULL)
+            continue;
+
+        strcpy(produto.nome, campo);
+
+
+        // Categoria
+        campo = strtok(NULL, ";");
+
+        if (campo == NULL)
+            continue;
+
+        strcpy(produto.categoria, campo);
+
+
+        // Preço
+        campo = strtok(NULL, ";");
+
+        if (campo == NULL)
+            continue;
+
+        produto.preco = atof(campo);
+
+
+        // Verifica se pertence a categoria procurada
+        if (strcmp(produto.categoria, categoriaBusca) == 0) {
+
+            printf("\nProduto encontrado!\n");
+            printf("Nome: %s\n", produto.nome);
+            printf("Categoria: %s\n", produto.categoria);
+            printf("Preço: R$ %.2f\n", produto.preco);
+
+            encontrado = 1;
+        }
+    }
+
+    fclose(arquivo);
+
+    if (encontrado == 0) {
+        printf("\nNenhum produto encontrado nessa categoria.\n");
+    }
+}
+
+//5
+void buscarPorFaixa(void) { //função void de busca por produto através da faixa de preço
+    FILE *arquivo; // ponteiro usado para acessar o arquivo.
+
+    char linha[256]; // armazena uma linha do arquivo por vez.
+
+    float precoMinimo;
+    float precoMaximo;
+
+    int encontrado = 0; // aqui eu defino uma variável para registrar quando se encontra um produto, ocupando o lugar de 0 produtos encontrados (por enquanto)
+
+    printf("\n===== BUSCAR POR FAIXA DE PRECO =====\n");
+
+    printf("Digite o preço mínimo: ");
+
+    if (scanf("%f", &precoMinimo) != 1) { //%F lê o float
+        limparEntrada(); //função de limpar o console
+        printf("Entrada inválida. Digite um número.\n"); 
+        return; // Encerra a função.
+    }
+
+    limparEntrada(); // remove a quebra de linha deixada pelo scanf
+
+    printf("Digite o preço máximo: ");
+
+    if (scanf("%f", &precoMaximo) != 1) { 
+        limparEntrada();
+        printf("Entrada inválida. Digite um número.\n");
+        return;
+    }
+
+    limparEntrada();
+
+    // || significa OU.
+    // Rejeita a busca se qualquer um dos preços for negativo.
+    if (precoMinimo < 0 || precoMaximo < 0) {
+        printf("Os preços não podem ser negativos.\n");
+        return;
+    }
+
+    if (precoMinimo > precoMaximo) {
+        printf("O preço mínimo não pode ser maior que o maximo.\n");
+        return;
+    }
+
+    // Abre o arquivo no modo "r": somente leitura.
+    arquivo = fopen("produtos.csv", "r");
+
+    // NULL indica que o arquivo não pôde ser aberto.
+    if (arquivo == NULL) {
+        printf("Não foi possível abrir produtos.csv.\n");
+        return;
+    }
+
+    // %.2f exibe um número com duas casas decimais.
+    printf("\nProdutos entre R$ %.2f e R$ %.2f:\n",
+           precoMinimo, precoMaximo);
+
+    // fgets lê uma linha por vez.
+    // sizeof(linha) informa o tamanho do espaço disponível.
+    // O laço continua enquanto a leitura retornar algo diferente de NULL.
+    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
+        Produto produto; // Guarda os dados do produto desta linha.
+        char *campo;     // Aponta para cada campo separado por strtok.
+
+        // Localiza a primeira quebra de linha e substitui por '\0'.
+        // '\0' indica o fim de uma string em C.
+        linha[strcspn(linha, "\r\n")] = '\0';
+
+        // Formato esperado: nome;categoria;preço
+        // A primeira chamada separa o nome.
+        campo = strtok(linha, ";");
+
+        if (campo == NULL) {
+            continue; // Ignora a linha se o campo não existir.
+        }
+
+        // Copia o nome respeitando o tamanho do destino.
+        snprintf(produto.nome, sizeof(produto.nome), "%s", campo);
+
+        // NULL faz strtok continuar separando a mesma linha.
+        campo = strtok(NULL, ";");
+
+        if (campo == NULL) {
+            continue;
+        }
+
+        snprintf(produto.categoria,
+                 sizeof(produto.categoria),
+                 "%s",
+                 campo);
+
+        // Obtém o terceiro campo: o preço.
+        campo = strtok(NULL, ";");
+
+        if (campo == NULL) {
+            continue;
+        }
+
+        // Converte, por exemplo, o texto "89.90" em um número.
+        // O arquivo deve conter preços válidos, com ponto decimal.
+        produto.preco = atof(campo);
+
+        // && significa E: as duas condições devem ser verdadeiras.
+        // >= e <= incluem os limites informados na busca.
+        if (produto.preco >= precoMinimo &&
+            produto.preco <= precoMaximo) {
+            printf("\nProduto encontrado!\n");
+            printf("Nome: %s\n", produto.nome);
+            printf("Categoria: %s\n", produto.categoria);
+            printf("Preço: R$ %.2f\n", produto.preco);
+
+            encontrado = 1; // Registra que houve um resultado.
+        }
+    }
+
+    fclose(arquivo); // Fecha o arquivo após a leitura.
+
+    if (encontrado == 0) {
+        printf("\nNenhum produto encontrado nessa faixa de preço.\n");
+    }
+}
+
+//6
 void remover(void){
 		//remove todas as infos do produto
 		// 1. Remove do ARRAY
@@ -123,7 +373,7 @@ void remover(void){
         printf("ERRO: Não foi possível abrir o arquivo CSV!\n\n");
         return;
     }
-    printf("\n\nArquivo CSV aberto com sucesso!\n");
+    printf("\n\narquivo CSV aberto com sucesso!\n");
     printf("-------------------------------------");
     
     // 3. Criando arquivo temporário do estoque de produtos em CSV
@@ -141,7 +391,7 @@ void remover(void){
     //menos o produto removido
     
     printf("\n\nLendo os produtos do arquivo anterior CSV...\n\n");
-    printf("O Produto que será apagado Ã©: %s\n\n", produto_removido);
+    printf("O Produto que será apagado é: %s\n\n", produto_removido);
 
     char linha[256];
     int encontrado = 0;
@@ -162,7 +412,7 @@ void remover(void){
         }
         else {
             encontrado = 1;
-            printf("NÃO copiando: %s (produto removido)\n", nome);
+            printf("NÁO copiando: %s (produto removido)\n", nome);
         }
     }
 
@@ -189,7 +439,7 @@ void remover(void){
         remove("temporario.csv");
         return;
     }
-    printf("Arquivo CSV antigo foi apagado!\n\n");
+    printf("arquivo CSV antigo foi apagado!\n\n");
 		printf("-------------------------------------");
 
     // 7. Renomeia o temporário para produtos_estoque.csv
@@ -203,8 +453,7 @@ void remover(void){
     printf("\nProduto removido com sucesso!\n\n");
 }
 
-
-//4
+//7
 void atualizar() {
     FILE *arquivo;
 
@@ -316,255 +565,8 @@ void atualizar() {
 }
 
 
-//5
-void buscarPorFaixa(void) { //função void de busca por produto atravÃ©s da faixa de preço
-    FILE *arquivo; // ponteiro usado para acessar o arquivo.
 
-    char linha[256]; // armazena uma linha do arquivo por vez.
 
-    float preçoMinimo;
-    float preçoMaximo;
-
-    int encontrado = 0; // aqui eu defino uma variável para registrar quando se encontra um produto, ocupando o lugar de 0 produtos encontrados (por enquanto)
-
-    printf("\n===== BUSCAR POR FAIXA DE PREÇO =====\n");
-
-    printf("Digite o preço minimo: ");
-
-    if (scanf("%f", &preçoMinimo) != 1) { //%F lê o float
-        limparEntrada(); //função de limpar o console
-        printf("Entrada inválida. Digite um numero.\n"); 
-        return; // Encerra a função.
-    }
-
-    limparEntrada(); // remove a quebra de linha deixado pelo scanf
-
-    printf("Digite o preço maximo: ");
-
-    if (scanf("%f", &preçoMaximo) != 1) { 
-        limparEntrada();
-        printf("Entrada inválida. Digite um numero.\n");
-        return;
-    }
-
-    limparEntrada();
-
-    // || significa OU.
-    // Rejeita a busca se qualquer um dos preços for negativo.
-    if (preçoMinimo < 0 || preçoMaximo < 0) {
-        printf("Os preços nao podem ser negativos.\n");
-        return;
-    }
-
-    if (preçoMinimo > preçoMaximo) {
-        printf("O preço minimo nao pode ser maior que o maximo.\n");
-        return;
-    }
-
-    // Abre o arquivo no modo "r": somente leitura.
-    arquivo = fopen("produtos.csv", "r");
-
-    // NULL indica que o arquivo não pÃ´de ser aberto.
-    if (arquivo == NULL) {
-        printf("Não foi possível abrir produtos.csv.\n");
-        return;
-    }
-
-    // %.2f exibe um número com duas casas decimais.
-    printf("\nProdutos entre R$ %.2f e R$ %.2f:\n",
-           preçoMinimo, preçoMaximo);
-
-    // fgets lê uma linha por vez.
-    // sizeof(linha) informa o tamanho do espaÃ§o disponÃ­vel.
-    // O laço continua enquanto a leitura retornar algo diferente de NULL.
-    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
-        Produto produto; // Guarda os dados do produto desta linha.
-        char *campo;     // Aponta para cada campo separado por strtok.
-
-        // Localiza a primeira quebra de linha e substitui por '\0'.
-        // '\0' indica o fim de uma string em C.
-        linha[strcspn(linha, "\r\n")] = '\0';
-
-        // Formato esperado: nome;categoria;preço
-        // A primeira chamada separa o nome.
-        campo = strtok(linha, ";");
-
-        if (campo == NULL) {
-            continue; // Ignora a linha se o campo não existir.
-        }
-
-        // Copia o nome respeitando o tamanho do destino.
-        snprintf(produto.nome, sizeof(produto.nome), "%s", campo);
-
-        // NULL faz strtok continuar separando a mesma linha.
-        campo = strtok(NULL, ";");
-
-        if (campo == NULL) {
-            continue;
-        }
-
-        snprintf(produto.categoria,
-                 sizeof(produto.categoria),
-                 "%s",
-                 campo);
-
-        // Obtém o terceiro campo: o preço.
-        campo = strtok(NULL, ";");
-
-        if (campo == NULL) {
-            continue;
-        }
-
-        // Converte, por exemplo, o texto "89.90" em um número.
-        // O arquivo deve conter preços vÃ¡lidos, com ponto decimal.
-        produto.preço = atof(campo);
-
-        // && significa E: as duas condiÃ§Ãµes devem ser verdadeiras.
-        // >= e <= incluem os limites informados na busca.
-        if (produto.preço >= preçoMinimo &&
-            produto.preço <= preçoMaximo) {
-            printf("\nProduto encontrado!\n");
-            printf("Nome: %s\n", produto.nome);
-            printf("Categoria: %s\n", produto.categoria);
-            printf("Preco: R$ %.2f\n", produto.preço);
-
-            encontrado = 1; // Registra que houve um resultado.
-        }
-    }
-
-    fclose(arquivo); // Fecha o arquivo após a leitura.
-
-    if (encontrado == 0) {
-        printf("\nNenhum produto encontrado nessa faixa de preço.\n");
-    }
-}
-
-//6
-void buscarPorCategoria() {
-    FILE *arquivo;
-    char linha[200];
-    char categoriaBusca[100];
-    int encontrado = 0;
-
-    printf("\n===== BUSCAR POR CATEGORIA =====\n");
-    printf("Digite a categoria: ");
-    scanf(" %99[^\n]", categoriaBusca);
-
-    arquivo = fopen("produtos.csv", "r");
-
-    if (arquivo == NULL) {
-        printf("Nenhum produto cadastrado.\n");
-        return;
-    }
-
-    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
-
-        Produto produto;
-        char *campo;
-
-        // Remove o \n do final da linha
-        linha[strcspn(linha, "\r\n")] = '\0';
-
-        // Nome
-        campo = strtok(linha, ";");
-
-        if (campo == NULL)
-            continue;
-
-        strcpy(produto.nome, campo);
-
-
-        // Categoria
-        campo = strtok(NULL, ";");
-
-        if (campo == NULL)
-            continue;
-
-        strcpy(produto.categoria, campo);
-
-
-        // Preco
-        campo = strtok(NULL, ";");
-
-        if (campo == NULL)
-            continue;
-
-        produto.preço = atof(campo);
-
-
-        // Verifica se pertence a categoria procurada
-        if (strcmp(produto.categoria, categoriaBusca) == 0) {
-
-            printf("\nProduto encontrado!\n");
-            printf("Nome: %s\n", produto.nome);
-            printf("Categoria: %s\n", produto.categoria);
-            printf("Preco: R$ %.2f\n", produto.preço);
-
-            encontrado = 1;
-        }
-    }
-
-    fclose(arquivo);
-
-    if (encontrado == 0) {
-        printf("\nNenhum produto encontrado nessa categoria.\n");
-    }
-}
-
-//7
-void buscarPorNome() {
-    FILE *arquivo;
-    char linha[200];
-    char nomeBusca[100];
-    int encontrado = 0;
-
-    printf("\n===== BUSCAR POR NOME =====\n");
-    printf("Digite o nome do produto: ");
-    if (scanf(" %99[^\n]", nomeBusca) != 1) {
-        printf("Entrada inválida.\n");
-        return;
-    }
-
-    arquivo = fopen("produtos.csv", "r");
-    if (arquivo == NULL) {
-        printf("Nenhum produto cadastrado.\n");
-        return;
-    }
-
-    while (fgets(linha, sizeof(linha), arquivo) != NULL) {
-        Produto produto;
-        char *campo;
-
-        linha[strcspn(linha, "\r\n")] = '\0';
-
-        campo = strtok(linha, ";");
-        if (campo == NULL) continue;
-        snprintf(produto.nome, sizeof(produto.nome), "%s", campo);
-
-        campo = strtok(NULL, ";");
-        if (campo == NULL) continue;
-        snprintf(produto.categoria, sizeof(produto.categoria), "%s", campo);
-
-        campo = strtok(NULL, ";");
-        if (campo == NULL) continue;
-        produto.preço = atof(campo);
-
-        if (strcmp(produto.nome, nomeBusca) == 0) { 
-            printf("\nProduto encontrado!\n");
-            printf("Nome: %s\n", produto.nome);
-            printf("Categoria: %s\n", produto.categoria);
-            printf("Preco: R$ %.2f\n", produto.preço);
-            encontrado = 1;
-            break;
-        }
-    }
-
-    fclose(arquivo);
-
-    if (!encontrado) {
-        printf("\nProduto não encontrado.\n");
-    }
-}
 
 int main() {
     setlocale(LC_ALL, "Portuguese");
