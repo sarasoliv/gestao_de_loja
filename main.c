@@ -548,17 +548,21 @@ void atualizar() {
 
 
 
+
 int main() {
     setlocale(LC_ALL, "Portuguese");
     int opcao;
 
-do {
+    do {
         printf("\n===== Menu de Opções =====\n");
         printf("[1] - Cadastrar produto\n");
         printf("[2] - Listar produtos\n");
         printf("[3] - Remover produto\n");
         printf("[4] - Atualizar produto\n");
-        printf("[5] - Sair do programa\n");
+		printf("[5] - Buscar por preço\n");
+		printf("[6] - Buscar por categoria\n");
+		printf("[7] - Buscar por nome\n");
+        printf("[0] - Sair do programa\n");
         printf("Escolha uma opção: ");
         
         if (scanf("%d", &opcao) != 1) {
@@ -567,20 +571,29 @@ do {
         }
 
         switch (opcao) {
+                break;
             case 1:
                 cadastrarProduto();
                 break;
             case 2:
-                printf("Listar produtos\n");
+                listar();
                 break;
             case 3:
-                printf("Remover produto\n");
-				remover(i);
+                remover(int (posicao));
                 break;
             case 4:
-                printf("Atualizar produto\n");
+                atualizar();
                 break;
-            case 5:
+	        case 5:
+                buscarPorFaixa(void);
+                break;
+			case 6:
+                buscarPorCategoria();
+                break;
+			case 7:
+                buscarPorNome();
+                break;
+            case 0:
                 printf("Saindo do sistema...\n");
                 break;
             default:
