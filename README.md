@@ -8,9 +8,9 @@
 
 Assista à explicação detalhada e ao funcionamento do projeto no vídeo abaixo:
 
-[![Assistir ao Vídeo](https://img.shields.io/badge/YouTube-Assistir%20o%20Passo%20a%20Passo-red?style=for-the-badge&logo=youtube)](INSIRA_AQUI_O_LINK_DO_SEU_VIDEO)
+[![Assistir ao Vídeo](https://img.shields.io/badge/YouTube-Assistir%20o%20Passo%20a%20Passo-red?style=for-the-badge&logo=youtube)](https://youtu.be/Pk1YDBMmU0E?is=UP_2e6Wwwp5PeAjh)
 
-> 🔗 **Link direto do vídeo:** [Clique aqui para assistir no YouTube](INSIRA_AQUI_O_LINK_DO_SEU_VIDEO)
+> 🔗 **Link direto do vídeo:** [Clique aqui para assistir no YouTube](https://youtu.be/Pk1YDBMmU0E?is=UP_2e6Wwwp5PeAjh)
 
 ---
 
