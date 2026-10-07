@@ -71,7 +71,7 @@ gestao_de_loja/
 ## ✒️ Colaboradores
 
 - **Felipe Carvalho Pereira**
-- **Jõao Pedro Forastieri Borba Ferreira**
+- **João Pedro Forastieri Borba Ferreira**
 - **Maria Eduarda Quiroz Corrêa**
 - **Rodrygo Schadeck Gomes**
 - **Sara dos Santos de Oliveira**
