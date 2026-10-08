@@ -72,7 +72,7 @@ gestao_de_loja/
 
 - **Felipe Carvalho Pereira**
 - **João Pedro Forastieri Borba Ferreira**
-- **Maria Eduarda Quiroz Corrêa**
+- **Maria Eduarda Queiroz Corrêa**
 - **Rodrygo Schadeck Gomes**
 - **Sara dos Santos de Oliveira**
 - **Yasmin Santos de Lima**
